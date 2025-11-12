@@ -1,0 +1,22 @@
+[project]
+name = "validator-saas"
+version = "0.1.0"
+description = "Plataforma SaaS para validação de arquivos regulatórios (BACEN, DIMP, DIRF)."
+authors = ["Equipe Validador Regulatorio <contato@example.com>"]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.23",
+    "pydantic>=2.6",
+    "python-multipart>=0.0.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",
+]
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
