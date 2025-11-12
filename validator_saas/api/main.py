@@ -2,17 +2,29 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from fastapi import Depends, FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from ..config import get_settings
 from ..database import InMemoryDatabase, get_session, init_db
 from ..models import Organization
 from ..services.validation_service import ValidationService
-from .schemas import OrganizationCreate, OrganizationRead, ValidationRequest, ValidationResponse
+from .schemas import (
+    OrganizationCreate,
+    OrganizationRead,
+    ValidationRequest,
+    ValidationResponse,
+    ValidatorRead,
+)
 
 settings = get_settings()
 app = FastAPI(title=settings.app_name)
+BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIR = BASE_DIR.parent / "frontend"
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,10 +34,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+if FRONTEND_DIR.exists():
+    app.mount("/app", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+
 
 @app.on_event("startup")
 def on_startup() -> None:
     init_db()
+
+
+@app.get("/", include_in_schema=False)
+def root() -> RedirectResponse:
+    if FRONTEND_DIR.exists():
+        return RedirectResponse(url="/app/", status_code=307)
+    return RedirectResponse(url="/docs", status_code=307)
 
 
 @app.post("/organizations", response_model=OrganizationRead, status_code=201)
@@ -41,6 +63,12 @@ def create_organization(
 def list_organizations(db: InMemoryDatabase = Depends(get_session)) -> list[Organization]:
     service = ValidationService(db)
     return service.list_organizations()
+
+
+@app.get("/validators", response_model=list[ValidatorRead])
+def list_validators(db: InMemoryDatabase = Depends(get_session)) -> list[dict]:
+    service = ValidationService(db)
+    return service.list_validators()
 
 
 @app.post("/validations", response_model=ValidationResponse)

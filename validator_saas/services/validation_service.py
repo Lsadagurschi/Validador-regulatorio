@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from ..models import Organization, RegulatoryFile
 from ..storage import InMemoryDatabase
 from ..validators import VALIDATORS, ValidationResult
@@ -57,6 +59,34 @@ class ValidationService:
         self.db.update_run(result.run)
         result.issues = self.db.list_issues_for_run(run.id)
         return result
+
+    # Catálogo de validadores ----------------------------------------
+    def list_validators(self) -> list[dict[str, Any]]:
+        """Exibe metadados dos validadores registrados."""
+
+        descriptors: list[dict[str, Any]] = []
+        for validator in VALIDATORS.values():
+            layout = validator.layout
+            descriptors.append(
+                {
+                    "key": validator.key,
+                    "regulator": validator.regulator,
+                    "layout": {
+                        "name": layout.name,
+                        "version": layout.version,
+                        "fields": [
+                            {
+                                "name": field.name,
+                                "type": getattr(field.type_, "__name__", str(field.type_)),
+                                "required": field.required,
+                                "max_length": field.max_length,
+                            }
+                            for field in layout.fields
+                        ],
+                    },
+                }
+            )
+        return descriptors
 
 
 __all__ = ["ValidationService"]

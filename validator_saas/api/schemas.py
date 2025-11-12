@@ -26,7 +26,9 @@ class OrganizationRead(BaseModel):
 
 class ValidationRequest(BaseModel):
     organization_id: int = Field(gt=0)
-    regulator: str = Field(description="Orgão regulador alvo: bacen|dimp|dirf")
+    regulator: str = Field(
+        description="Orgão regulador alvo: bacen|dimp|dirf|cadoc_3040|cadoc_3050|cadoc_6334"
+    )
     layout_version: str = Field(default="1.0")
 
 
@@ -56,6 +58,25 @@ class ValidationResponse(BaseModel):
     issues: list[ValidationIssueRead]
 
 
+class LayoutFieldRead(BaseModel):
+    name: str
+    type: str
+    required: bool
+    max_length: Optional[int] = None
+
+
+class LayoutRead(BaseModel):
+    name: str
+    version: str
+    fields: list[LayoutFieldRead]
+
+
+class ValidatorRead(BaseModel):
+    key: str
+    regulator: str
+    layout: LayoutRead
+
+
 __all__ = [
     "OrganizationCreate",
     "OrganizationRead",
@@ -63,4 +84,7 @@ __all__ = [
     "ValidationIssueRead",
     "ValidationRunRead",
     "ValidationResponse",
+    "LayoutFieldRead",
+    "LayoutRead",
+    "ValidatorRead",
 ]
