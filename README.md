@@ -59,6 +59,9 @@ principais de cada regulatório implementado:
 | BACEN       | `codigo_registro`, `cnpj_instituicao`, `tipo_produto`, `valor_transacao`, `data_transacao`, `quantidade_transacoes` |
 | DIMP (TED/TEF) | `codigo_registro`, `cnpj_participante`, `modalidade`, `valor_total`, `quantidade_operacoes`, `data_referencia` |
 | DIRF        | `tipo_registro`, `cnpj_fonte_pagadora`, `cpf_beneficiario`, `cnpj_beneficiario`, `valor_rendimento`, `imposto_retido`, `ano_calendario` |
+| CADOC 3040  | `tipo_registro`, `cnpj_instituicao`, `codigo_produto`, `saldo_ativo`, `saldo_passivo`, `data_base` |
+| CADOC 3050  | `tipo_registro`, `cnpj_instituicao`, `codigo_modalidade`, `valor_exposicao`, `prazo_medio_dias`, `indice_cobertura` |
+| CADOC 6334  | `tipo_registro`, `cnpj_participante`, `codigo_servico`, `quantidade_operacoes`, `valor_total`, `canal_atendimento`, `data_referencia` |
 
 ## Testes automatizados
 
