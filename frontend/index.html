@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Validador Regulatórios</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Validador Regulatórios</h1>
+      <p>
+        Plataforma SaaS para submissão e validação de arquivos regulatórios
+        (BACEN, DIMP, DIRF, CADOC 3040/3050/6334).
+      </p>
+    </header>
+
+    <main>
+      <section class="card" id="organization-section">
+        <h2>Cadastrar instituição</h2>
+        <form id="organization-form">
+          <div class="form-group">
+            <label for="org-name">Nome</label>
+            <input id="org-name" name="name" placeholder="Instituição Exemplo" required />
+          </div>
+          <div class="form-group">
+            <label for="org-role">Perfil</label>
+            <select id="org-role" name="role" required>
+              <option value="adquirente">Adquirente</option>
+              <option value="subadquirente">Subadquirente</option>
+              <option value="emissor">Emissor</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="org-tax">CNPJ</label>
+            <input id="org-tax" name="tax_id" placeholder="00.000.000/0000-00" required />
+          </div>
+          <button type="submit">Registrar</button>
+          <p class="feedback" id="org-feedback"></p>
+        </form>
+      </section>
+
+      <section class="card" id="organizations-list">
+        <div class="section-header">
+          <h2>Instituições cadastradas</h2>
+          <button id="refresh-organizations" title="Atualizar lista">⟳ Atualizar</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Perfil</th>
+              <th>CNPJ</th>
+            </tr>
+          </thead>
+          <tbody id="organizations-table"></tbody>
+        </table>
+      </section>
+
+      <section class="card" id="validators-section">
+        <div class="section-header">
+          <h2>Validadores disponíveis</h2>
+          <button id="refresh-validators" title="Atualizar lista">⟳ Atualizar</button>
+        </div>
+        <div id="validators-container"></div>
+      </section>
+
+      <section class="card" id="validation-section">
+        <h2>Submeter arquivo para validação</h2>
+        <form id="validation-form">
+          <div class="form-group">
+            <label for="validation-org">Instituição</label>
+            <select id="validation-org" name="organization_id" required></select>
+          </div>
+          <div class="form-group">
+            <label for="validation-regulator">Regulatório</label>
+            <select id="validation-regulator" name="regulator" required></select>
+          </div>
+          <div class="form-group">
+            <label for="validation-layout">Versão do layout</label>
+            <input
+              id="validation-layout"
+              name="layout_version"
+              value="1.0"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="validation-file">Arquivo CSV</label>
+            <input id="validation-file" name="file" type="file" accept=".csv" required />
+          </div>
+          <button type="submit">Validar arquivo</button>
+          <p class="feedback" id="validation-feedback"></p>
+        </form>
+        <div id="validation-result" hidden>
+          <h3>Resultado</h3>
+          <p id="validation-summary"></p>
+          <table>
+            <thead>
+              <tr>
+                <th>Linha</th>
+                <th>Campo</th>
+                <th>Gravidade</th>
+                <th>Mensagem</th>
+              </tr>
+            </thead>
+            <tbody id="validation-issues"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <small>© 2024 Validador Regulatórios</small>
+    </footer>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
